@@ -1,0 +1,26 @@
+name: Update Go Sum
+
+on:
+  push:
+    branches:
+      - main # Set your branch name here
+
+jobs:
+  update-go-sum:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.x # Set your desired Go version
+
+      - name: Update Go Sum
+        run: |
+          go get -u
+          go mod tidy
+          git diff --exit-code || (git add go.mod go.sum && git commit -m "Update go.sum" && git push)
+          
